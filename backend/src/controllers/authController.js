@@ -1,5 +1,6 @@
 const User = require('../models/User.js');
 const bcrypt = require('bcryptjs');
+const generateToken = require('../utils/generateToken.js');
 
 const register = async(req, res)=>{
     try{
@@ -26,5 +27,48 @@ const register = async(req, res)=>{
     }
     
 }
+
+const login = async(req, res)=>{
+
+    try{
+        const {email, password} = req.body;
+
+        const loginUser = await User.findOne({email});
+
+        if(!loginUser){
+            return res.status(401).json({message: "Invalid credentials"});
+        }
+
+        const comparePassword = await bcrypt.compare(password, loginUser.password);
+
+        if(!comparePassword){
+            return res.status(401).json({message: "Invalid credentials"});
+        }
+
+        const token = generateToken(loginUser._id);
+        res.cookie(
+            'token',
+            token,
+            {
+                httpOnly: true,
+                secure: true,
+                maxAge: 30 * 60 * 1000
+            }
+        );
+
+        res.status(200).json({
+            success: true,
+            user:{
+                id: loginUser._id,
+                name: loginUser.name,
+                email: loginUser.email
+            }
+        });
+
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+}
+
 // this will contain multiple method like login as well
-module.exports = {register};
+module.exports = {register, login};
