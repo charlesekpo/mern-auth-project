@@ -51,7 +51,7 @@ const login = async(req, res)=>{
             token,
             {
                 httpOnly: true,
-                secure: true,
+                secure: false, // since i am working locally and i need to get back the cookie sent from frontend
                 maxAge: 30 * 60 * 1000
             }
         );
@@ -70,5 +70,19 @@ const login = async(req, res)=>{
     }
 }
 
+const profile = async(req, res)=>{
+    try{
+        const user = await User.findById(req.user.id).select('-password');
+        res.status(200).json(user)
+    }catch(error){
+        res.status(400).json({message: error.message});
+    }
+}
+
+const logout =(req, res)=>{
+    res.cookie('token','',{expiresIn: new Date(0)});
+    res.status(200).json({message: "Logged Out"});
+}
+
 // this will contain multiple method like login as well
-module.exports = {register, login};
+module.exports = {register, login, profile, logout};
