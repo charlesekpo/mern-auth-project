@@ -111,5 +111,14 @@ const createAdmin =async(req, res)=>{
     }
 }
 
+const getAllUser = async(req, res)=>{
+    try{
+        const allUser = await User.find().select("-password -__v");
+        res.status(200).json(allUser);
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+}
+
 // this will contain multiple method like login as well
-module.exports = {register, login, profile, logout, createAdmin, deleteUser};
+module.exports = {register, login, profile, logout, createAdmin, deleteUser, getAllUser};
