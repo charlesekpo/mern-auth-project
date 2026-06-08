@@ -45,7 +45,7 @@ const login = async(req, res)=>{
             return res.status(401).json({message: "Invalid credentials"});
         }
 
-        const token = generateToken(loginUser._id);
+        const token = generateToken(loginUser._id, loginUser.role);
         res.cookie(
             'token',
             token,
@@ -84,5 +84,32 @@ const logout =(req, res)=>{
     res.status(200).json({message: "Logged Out"});
 }
 
+const deleteUser = async(req, res)=>{
+    try{
+        const user = await User.findByIdAndDelete(req.params.id);
+        if(!user){
+            return res.status(404).json({message: "User not found"});
+        };
+        res.status(200).json({message: "Deleted successfully"});
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+}
+
+const createAdmin =async(req, res)=>{
+    try{
+
+        if(req.headers['x-admin-secret'] !== process.env.ADMIN_SECRET){
+            return res.status(403).json({message: "Forbidden"});
+        }
+        const{name, email, password} = req.body;
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const createAdminUser = await User.create({name, email, password: hashedPassword, role:'admin'});
+        res.status(201).json(createAdminUser);
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+}
+
 // this will contain multiple method like login as well
-module.exports = {register, login, profile, logout};
+module.exports = {register, login, profile, logout, createAdmin, deleteUser};
