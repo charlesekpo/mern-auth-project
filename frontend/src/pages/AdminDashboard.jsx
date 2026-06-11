@@ -6,15 +6,18 @@ const AdminDashboard = () => {
     const[users, setUsers] = useState([]);
     const[error, setError] = useState('');
     const[message, setMessage] = useState('');
+    const[loading, setLoading] = useState(true);
 
     useEffect(()=>{
         const fetchUsers = async()=>{
             try{
-                const response = await API.get('/all-user');
+                const response = await API.get('/all-users');
                 setUsers(response.data);
                 setMessage('Record fetched successfully');
             }catch(err){
                 setError(err.response?.data?.message || 'Failed to fetch users');
+            }finally{
+                setLoading(false);
             }
         };
         fetchUsers();
@@ -24,9 +27,10 @@ const AdminDashboard = () => {
         if(!window.confirm('Are you sure to delete user?')) return;
 
         try{
-            await API.post(`/delete-user/${userId}`);
+            await API.delete(`/delete-user/${userId}`);
             setUsers(users.filter(user => user._id !== userId))
             setMessage('User deleted successfully');
+            setTimeout(() => setMessage(''), 3000);
         }catch(err){
             setError(err.response?.data?.message || "Failed to delete user")
         }
@@ -38,8 +42,9 @@ const AdminDashboard = () => {
             <h2>Admin Dashboard - All Users</h2>
             {error && <div className='error'>{error}</div>}
             {message && <div className='success'>{message}</div>}
-            {users.length === 0 && !error && <p>No users found</p>}
-            {users.length > 0 && (
+            {loading && <p>Loading users...</p>}
+            {!loading && users.length === 0 && !error && <p>No users found</p>}
+            {!loading && users.length > 0 && (
                 <table>
                     <thead>
                         <tr>
@@ -55,7 +60,7 @@ const AdminDashboard = () => {
                             <td>{user.email}</td>
                             <td>{user.role}</td>
                             <td>
-                                <button className='delete-button' onClick={handleDelete(user._id)}>
+                                <button className='delete-btn' onClick={()=>handleDelete(user._id)}>
                                     Delete
                                 </button>
                             </td>

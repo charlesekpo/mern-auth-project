@@ -1,7 +1,7 @@
 import {Navigate} from 'react-router-dom';
-import {useAuth} from '../context/AuthContex.jsx';
+import {useAuth} from '../context/AuthContext.jsx';
 
-const ProtectedRoute = ({children, admin=false}) => {
+const ProtectedRoute = ({children, adminOnly=false}) => {
     //first get user from global state
     const{user} = useAuth();
 

@@ -10,7 +10,7 @@ const Register = () => {
     const[password, setPassword] = useState('');
     const[error, setError] = useState('');
     const[success, setSuccess] = useState('');
-    const[loading, setLoading] = useState(true);
+    const[loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ const Register = () => {
 
   return (
     <div className='form-container'>
-        <h1>Register</h1>
+        <h2>Register</h2>
         {error && <div className='error'>{error}</div>}
         {success && <div className='success'>{success}</div>}
         <form onSubmit={handleSubmit}>
@@ -66,7 +66,7 @@ const Register = () => {
                 <label>Password</label>
                 <input 
                 type="password"
-                value={name}
+                value={password}
                 onChange={(e)=>setPassword(e.target.value)} 
                 placeholder='Enter Password'
                 required

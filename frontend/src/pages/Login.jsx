@@ -2,7 +2,7 @@
 import {useState} from 'react';
 import{useNavigate, Link} from 'react-router-dom';
 import API from '../api/axios.js';
-import {useAuth} from '../context/AuthContex.jsx';
+import {useAuth} from '../context/AuthContext.jsx';
 
 const Login =()=>{
 
@@ -28,7 +28,7 @@ const Login =()=>{
             login(response?.data?.user);
 
             if(response?.data?.user.role === 'admin'){
-                navigate('/admin-dashboard');
+                navigate('/admin');
             }else{
                 navigate('/profile');
             }
@@ -41,7 +41,7 @@ const Login =()=>{
     }
 
     return (<div className='form-container'>
-        <h1>Login</h1>
+        <h2>Login</h2>
         {error && <div className='error'>{error}</div>}
         <form onSubmit={handleSubmit}>
             <div className='form-group'>

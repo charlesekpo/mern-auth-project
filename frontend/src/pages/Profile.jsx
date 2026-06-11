@@ -1,16 +1,16 @@
 import {useState, useEffect} from 'react'
 import API from'../api/axios.js';
-import Navbar from './Navbar.jsx';
+import Navbar from '../components/Navbar.jsx';
 
 const Profile = () => {
-    const[profileData, setProfileData] = useState('');
+    const[profileData, setProfileData] = useState(null);
     const[error, setError] = useState('');
 
     useEffect(()=>{
         const fetchProfile = async()=>{
             try{
                 const profileD = await API.get('/profile');
-                serProfileData(profileD.data);
+                setProfileData(profileD.data);
             }catch(error){
                 setError(error.response?.data?.message || 'Failed to load profile');
             }

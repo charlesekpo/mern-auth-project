@@ -121,5 +121,16 @@ const getAllUser = async(req, res)=>{
     }
 }
 
+const getMe = async (req, res) => {
+    try {
+        // protect middleware already verified the token
+        // and set req.user — so we just fetch the user from db
+        const user = await User.findById(req.user.id).select('-password -__v');
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 // this will contain multiple method like login as well
-module.exports = {register, login, profile, logout, createAdmin, deleteUser, getAllUser};
+module.exports = {register, login, profile, logout, createAdmin, deleteUser, getAllUser, getMe};

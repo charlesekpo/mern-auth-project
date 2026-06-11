@@ -1,4 +1,4 @@
-import {useAuth} from '../context/AuthContex.jsx';
+import {useAuth} from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios.js';
 
