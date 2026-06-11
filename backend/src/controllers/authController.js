@@ -61,7 +61,8 @@ const login = async(req, res)=>{
             user:{
                 id: loginUser._id,
                 name: loginUser.name,
-                email: loginUser.email
+                email: loginUser.email,
+                role: loginUser.role //Included so that frontend can receive and navigate admin to his profile
             }
         });
 

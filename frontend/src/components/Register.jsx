@@ -35,9 +35,13 @@ const Register = () => {
 
 
   return (
-    <div>
+    <div className='form-container'>
+        <h1>Register</h1>
+        {error && <div className='error'>{error}</div>}
+        {success && <div className='success'>{success}</div>}
         <form onSubmit={handleSubmit}>
-            <div>
+            <div className='form-group'>
+                <label>Name</label>
                 <input 
                 type="text"
                 value={name}
@@ -47,7 +51,8 @@ const Register = () => {
                 />
             </div>
 
-            <div>
+            <div className='form-group'>
+                <label>Email</label>
                 <input 
                 type="email"
                 value={email}
@@ -57,7 +62,8 @@ const Register = () => {
                 />
             </div>
 
-            <div>
+            <div className='form-group'>
+                <label>Password</label>
                 <input 
                 type="password"
                 value={name}
@@ -66,10 +72,13 @@ const Register = () => {
                 required
                 />
             </div>
-            <button type='submit' disabled={loading}>
+            <button className='btn' type='submit' disabled={loading}>
                 {loading ? 'Creating account...' : 'Register'}
             </button>
         </form>
+        <div className='link-text'>
+            Already have an account? <Link to="/login">Login Here</Link>
+        </div>
     </div>
   )
 }
