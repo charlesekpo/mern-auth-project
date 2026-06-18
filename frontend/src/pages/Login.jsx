@@ -34,7 +34,7 @@ const Login =()=>{
             }
             
         }catch(error){
-            setError(response?.data?.message);
+            setError(error?.response?.data?.message || 'Invalid email or password');
         }finally{
             setLoading(false);
         }
